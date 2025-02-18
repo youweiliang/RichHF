@@ -19,16 +19,16 @@ After downloading the data, run `python train.py --multi_heads` to train the RAH
 **Note:** Scaling up the ViT model improves RAHF performance, while scaling up T5 from T5-base to T5-large does not. Thus, we use `google/vit-large-patch16-384` for ViT and `t5-base` for T5.
 
 ## Inference
-After training, run `python inference.py --log_dir [your_log_path] --infer` to infer and visualize heatmaps on the test set. Run `python inference.py -h` for help.
+After training, run `python inference.py --log_dir [your_log_path] --infer` to infer and visualize heatmaps on the test set. To get the testing metrics on the test set, run `python inference.py --log_dir [your_log_path] --eval`. Run `python inference.py -h` for help.
 
 ## Trained Models and Results
 
-A **multi-head** RAHF model checkpoint is available on [Google Drive](https://drive.google.com/file/d/1-jKfmpyGtJ0UAgEQ23zylRsmQ82qigzB/view?usp=sharing). Load the weights into a RAHF model with this configuration: `"vit_model": "google/vit-large-patch16-384", "t5_model": "t5-base"`.
+The trained **multi-head** RAHF model checkpoint is available on [Google Drive](https://drive.google.com/file/d/1-jKfmpyGtJ0UAgEQ23zylRsmQ82qigzB/view?usp=sharing). Load the weights into a RAHF model with this configuration: `"vit_model": "google/vit-large-patch16-384", "t5_model": "t5-base"`.
 
-Testing metrics are comparable to the [RichHF paper](https://arxiv.org/pdf/2312.10240), with slight variations:
+Testing metrics of this model are comparable to the [RichHF paper](https://arxiv.org/pdf/2312.10240), with slight variations:
 
 #### Heatmap Prediction:
-| Model          | All Data MSE ↓ | GT=0 MSE ↓ | GT>0 CC ↑ | GT>0 KLD ↓ | GT>0 SIM ↑ | GT>0 NSS ↑ | GT>0 AUC-Judd ↑ |
+|                | All Data MSE ↓ | GT=0 MSE ↓ | GT>0 CC ↑ | GT>0 KLD ↓ | GT>0 SIM ↑ | GT>0 NSS ↑ | GT>0 AUC-Judd ↑ |
 |----------------|----------------|------------|-----------|------------|------------|------------|-----------------|
 | Implausibility | 0.00724        | 0.00078    | 0.525     | 1.649      | 0.339      | 2.029      | 0.905           |
 | Misalignment   | 0.00324        | 0.00035    | 0.232     | 2.848      | 0.104      | 1.256      | 0.797           |
@@ -44,7 +44,34 @@ Testing metrics are comparable to the [RichHF paper](https://arxiv.org/pdf/2312.
 |-----------|--------|----------|
 | 56.5      | 45.2   | 47.5     |
 
-The augmented-prompt RAHF variant trained here underperforms the multi-head version, contrary to findings in the paper. We attribute this to differences between our implementation and Google’s original setup.
+The augmented-prompt RAHF variant trained here slightly underperforms the multi-head version, contrary to findings in the paper. We attribute this to differences between our implementation and Google’s original setup.
+
+## Example Usage
+```python
+import torch
+from model import preprocess_image, RAHF
+
+image_path = "a.jpg"
+caption = "A description of the image"
+image_tensor = preprocess_image(image_path)
+model = RAHF()
+ckpt_path = 'rahf_model.pt'
+model.load_state_dict(torch.load(ckpt_path, map_location='cpu'))
+model.eval()
+with torch.no_grad():
+    out = model(image_tensor, caption)
+heatmaps = out.pop('heatmaps')
+print(out)
+
+# save the heatmaps
+for k, map_ in heatmaps.items():
+    imgs = map_.detach().cpu()
+    imgs = imgs.permute([1, 2, 0])  # change to h x w x 1
+    imgs = imgs.expand([-1, -1, 3])
+    imgs = imgs * 255
+    im = Image.fromarray(imgs.numpy().astype('uint8'))
+    im.save(f'{k}.jpg')
+```
 
 ## Acknowledgement
 To cite our paper:
