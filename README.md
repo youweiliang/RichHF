@@ -2,6 +2,9 @@
 
 This repository holds the training and inference code to replicate the results in the CVPR 2024 paper [Rich Human Feedback for Text-to-Image Generation](https://arxiv.org/pdf/2312.10240). The RAHF (Rich Automatic Human Feedback) model here is built as close to the RAHF model in the paper as possible. Most of the testing metrics are reproduced. However, since the ViT and T5X models used in the paper are not exactly the same as the publicly available ViT and T5 models in PyTorch used in this repository, there could be some minor differences between the RAHF model here and the original model developed at Google.
 
+## Environment
+The code is tested with Python 3.9.18, torch 2.0.0, torchvision 0.15.1, transformers 4.32.0, datasets 2.16.1, scipy 1.11.4, tensorboard 2.18.0, scikit-learn 1.3.2, and tensorflow 2.18.0. Note: tensorflow is only needed to load the RichHF-18K dataset.
+
 ## Data
 *If you just want to use the trained RAHF model, you don't need to download this dataset. Check [Trained Models and Results](#trained-models-and-results) below.*
 
