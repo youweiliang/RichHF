@@ -14,7 +14,7 @@ Create a folder to download images: `mkdir data`.
 Run `python get_dataset.py` to download the Pick-a-Pic dataset `yuvalkirstain/pickapic_v1` (~190GB) and extract the images needed for RichHF-18K. The extracted images and heatmaps are saved under `richhf-18k/train`, `richhf-18k/dev`, and `richhf-18k/test` for browsing. They are also saved as a HuggingFace dataset under `/data/rich_human_feedback_dataset`.
 
 ## Training
-After downloading the data, run `python train.py --multi_heads` to train the RAHF model on the RichHF-18K dataset. For other parameters, run `python train.py -h`. Model checkpoints and logs are saved under the `exp` directory by default. 
+After downloading the data, run `python train.py --multi_heads` to train the RAHF model on the RichHF-18K dataset. For other parameters, run `python train.py -h`. Model checkpoints and logs are saved under the `exp` directory by default. To start training with multiple GPUs, run `torchrun --nproc_per_node [number_of_gpus] --master_port [port_number] train.py --multi_heads`.
 
 **Note:** Scaling up the ViT model improves RAHF performance, while scaling up T5 from T5-base to T5-large does not. Thus, we use `google/vit-large-patch16-384` for ViT and `t5-base` for T5.
 
