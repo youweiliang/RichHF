@@ -44,7 +44,6 @@ Testing metrics of this model are comparable to the [RichHF paper](https://arxiv
 |-----------|--------|----------|
 | 56.5      | 45.2   | 47.5     |
 
-The augmented-prompt RAHF variant trained here slightly underperforms the multi-head version, contrary to findings in the paper. We attribute this to differences between our implementation and Google’s original setup.
 
 ## Example Usage
 ```python
@@ -84,4 +83,4 @@ To cite our paper:
 }
 ```
 
-Parts of the data loading code are from this [repo](https://github.com/google-research/google-research/tree/master/richhf_18k) and this [repo](https://github.com/RAraghavarora/RichHF_T2I).
+Parts of the data loading code are from this [repo](https://github.com/google-research/google-research/tree/master/richhf_18k) and this [repo](https://github.com/RAraghavarora/RichHF_T2I). AUC Judd metric is from this [repo](https://github.com/MemoonaTahira/Visual-Saliency-Metrics-for-Evaluating-Deep-Learning-Model-performance).
