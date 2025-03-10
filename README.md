@@ -49,6 +49,7 @@ Testing metrics of this model are comparable to the [RichHF paper](https://arxiv
 ```python
 import torch
 from model import preprocess_image, RAHF
+from PIL import Image
 
 image_path = "a.jpg"
 caption = "A description of the image"
