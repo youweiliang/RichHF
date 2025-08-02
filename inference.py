@@ -148,7 +148,7 @@ test_dataset = HuggingFaceDataset(full_dataset["test"], vit_model, image_size)
 
 train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=4)#, collate_fn=collate_fn)
 dev_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=4)#, collate_fn=collate_fn)
-test_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=4)#, collate_fn=collate_fn)
+test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=4)#, collate_fn=collate_fn)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
